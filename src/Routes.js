@@ -8,8 +8,8 @@ export function Routes() {
   return (
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route exact path="/new" component={NewContact} />
-      <Route exact path="/edit/:id" component={EditContact} />
+      <Route path="/new" component={NewContact} />
+      <Route path="/edit/:id" component={EditContact} />
     </Switch>
   );
 }
