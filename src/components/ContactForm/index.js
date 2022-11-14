@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
@@ -53,6 +54,8 @@ export function ContactForm({ buttonLabel }) {
     }
   };
 
+  const getErrorMessageByFieldName = (fieldName) => errors.find((error) => error.field === fieldName)?.message;
+
   console.log(errors);
 
   const handleSubmit = ((event) => {
@@ -69,16 +72,18 @@ export function ContactForm({ buttonLabel }) {
   return (
     <>
       <Form onSubmit={handleSubmit}>
-        <FormGroup>
+        <FormGroup error={getErrorMessageByFieldName('name')}>
           <Input
+            error={getErrorMessageByFieldName('name')}
             placeholder="Nome"
             value={name}
             onChange={handleNameChange}
           />
         </FormGroup>
 
-        <FormGroup>
+        <FormGroup error={getErrorMessageByFieldName('email')}>
           <Input
+            error={getErrorMessageByFieldName('email')}
             placeholder="E-mail"
             value={email}
             onChange={handleEmailChange}
