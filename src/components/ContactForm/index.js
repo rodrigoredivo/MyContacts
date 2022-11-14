@@ -12,6 +12,24 @@ export function ContactForm({ buttonLabel }) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
+  const [errors, setErrors] = useState([]);
+
+  const handleNameChange = ({ target }) => {
+    setName(target.value);
+
+    if (!target.value) {
+      setErrors((prevState) => [
+        ...prevState,
+        { field: 'name', message: 'Nome é obrigatório.' },
+      ]);
+    } else {
+      setErrors((prevState) => prevState.filter(
+        (error) => error.field !== 'name',
+      ));
+    }
+  };
+
+  console.log(errors);
 
   const handleSubmit = ((event) => {
     event.preventDefault();
@@ -31,13 +49,11 @@ export function ContactForm({ buttonLabel }) {
           <Input
             placeholder="Nome"
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={handleNameChange}
           />
         </FormGroup>
 
-        <FormGroup
-          error="O formato do e-mail é inválido."
-        >
+        <FormGroup>
           <Input
             placeholder="E-mail"
             value={email}
