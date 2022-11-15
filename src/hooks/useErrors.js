@@ -26,5 +26,10 @@ export default function useErrors() {
 
   const getErrorMessageByFieldName = (fieldName) => errors.find((error) => error.field === fieldName)?.message;
 
-  return { setError, removeError, getErrorMessageByFieldName };
+  return {
+    errors,
+    setError,
+    removeError,
+    getErrorMessageByFieldName,
+  };
 }
