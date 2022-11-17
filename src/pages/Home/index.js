@@ -52,3 +52,13 @@ export function Home() {
     </Container>
   );
 }
+
+fetch('http://localhost:3000')
+  .then((response) => {
+    console.log('response', response);
+
+    response.headers.forEach((header) => console.log(header));
+  })
+  .catch((error) => {
+    console.log('error', error);
+  });
