@@ -14,4 +14,4 @@ class HttpClient {
   }
 }
 
-export default HttpClient();
+export default HttpClient;
