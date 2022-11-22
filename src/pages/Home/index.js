@@ -35,7 +35,7 @@ export function Home() {
 
         setContacts(contactsList);
       } catch (error) {
-        console.log('error', error);
+        console.log('Caiu no Catch', error);
       } finally {
         setIsLoading(false);
       }
