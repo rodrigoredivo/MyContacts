@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import useErrors from '../../hooks/useErrors';
 import isEmailValid from '../../utils/isEmailValid';
 import formatPhone from '../../utils/formatPhone';
+import useErrors from '../../hooks/useErrors';
+import CategoriesService from '../../service/CategoriesService';
 
 import { ButtonContainer, Form } from './styles';
 
@@ -17,7 +18,8 @@ export function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [categories, setCategories] = useState([]);
 
   const {
     errors,
@@ -27,6 +29,15 @@ export function ContactForm({ buttonLabel }) {
   } = useErrors();
 
   const isFormValid = (name && errors.length === 0);
+
+  useEffect(() => {
+    async function loadCategories() {
+      const categoriesList = await CategoriesService.listCategories();
+      setCategories(categoriesList);
+    }
+
+    loadCategories();
+  }, []);
 
   const handleNameChange = ({ target }) => {
     setName(target.value);
@@ -59,7 +70,7 @@ export function ContactForm({ buttonLabel }) {
       name,
       email,
       phone: phone.replace(/\D/g, ''),
-      category,
+      categoryId,
     });
   });
 
@@ -95,12 +106,16 @@ export function ContactForm({ buttonLabel }) {
 
         <FormGroup>
           <Select
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
+            value={categoryId}
+            onChange={(event) => setCategoryId(event.target.value)}
           >
-            <option value="">Categoria</option>
-            <option value="Instagram">Instragram</option>
-            <option value="Discord">Discord</option>
+            <option value="">Sem categoria</option>
+
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </Select>
         </FormGroup>
 
