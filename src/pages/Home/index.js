@@ -13,6 +13,7 @@ import {
   Card,
   ErrorContainer,
   EmptyListContainer,
+  SearchNotFoundContainer,
 } from './styles';
 
 import arrow from '../../assets/images/icons/arrow.svg';
@@ -20,6 +21,7 @@ import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import sad from '../../assets/images/sad.svg';
 import emptyBox from '../../assets/images/empty-box.svg';
+import magnifierQuestiom from '../../assets/images/magnifier-question.svg';
 
 import { Loader } from '../../components/Loader';
 import Button from '../../components/Button';
@@ -126,6 +128,17 @@ export function Home() {
                 para cadastrar o seu primeiro!
               </p>
             </EmptyListContainer>
+          )}
+
+          {(contacts.length > 0 && filteredContacts.length < 1) && (
+            <SearchNotFoundContainer>
+              <img src={magnifierQuestiom} alt="Magnifier question" />
+
+              <span>
+                Nenhum resultado foi encontrado
+                para <strong>{searchTerm}</strong>.
+              </span>
+            </SearchNotFoundContainer>
           )}
 
           {filteredContacts.length > 0 && (
