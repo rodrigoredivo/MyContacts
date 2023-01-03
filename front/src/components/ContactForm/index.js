@@ -12,7 +12,7 @@ import { ButtonContainer, Form } from './styles';
 import { FormGroup } from '../FormGroup';
 import Input from '../Input';
 import Select from '../Select';
-import Button from '../Button';
+import { Button } from '../Button';
 
 export function ContactForm({ buttonLabel, onSubmit }) {
   const [name, setName] = useState('');
@@ -21,15 +21,13 @@ export function ContactForm({ buttonLabel, onSubmit }) {
   const [categoryId, setCategoryId] = useState('');
   const [categories, setCategories] = useState([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
-    errors,
-    setError,
-    removeError,
-    getErrorMessageByFieldName,
+    errors, setError, removeError, getErrorMessageByFieldName,
   } = useErrors();
 
-  const isFormValid = (name && errors.length === 0);
+  const isFormValid = name && errors.length === 0;
 
   useEffect(() => {
     async function loadCategories() {
@@ -37,7 +35,8 @@ export function ContactForm({ buttonLabel, onSubmit }) {
         const categoriesList = await CategoriesService.listCategories();
 
         setCategories(categoriesList);
-      } catch {} finally {
+      } catch {
+      } finally {
         setIsLoadingCategories(false);
       }
     }
@@ -69,16 +68,20 @@ export function ContactForm({ buttonLabel, onSubmit }) {
     setPhone(formatPhone(target.value));
   };
 
-  const handleSubmit = ((event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    onSubmit({
+    setIsSubmitting(true);
+
+    await onSubmit({
       name,
       email,
       phone,
       categoryId,
     });
-  });
+
+    setIsSubmitting(false);
+  };
 
   return (
     <>
@@ -89,6 +92,7 @@ export function ContactForm({ buttonLabel, onSubmit }) {
             placeholder="Nome *"
             value={name}
             onChange={handleNameChange}
+            disabled={isSubmitting}
           />
         </FormGroup>
 
@@ -99,6 +103,7 @@ export function ContactForm({ buttonLabel, onSubmit }) {
             placeholder="E-mail"
             value={email}
             onChange={handleEmailChange}
+            disabled={isSubmitting}
           />
         </FormGroup>
 
@@ -107,6 +112,7 @@ export function ContactForm({ buttonLabel, onSubmit }) {
             placeholder="Telefone"
             value={phone}
             onChange={handlePhoneChange}
+            disabled={isSubmitting}
           />
         </FormGroup>
 
@@ -114,7 +120,7 @@ export function ContactForm({ buttonLabel, onSubmit }) {
           <Select
             value={categoryId}
             onChange={(event) => setCategoryId(event.target.value)}
-            disabled={isLoadingCategories}
+            disabled={isLoadingCategories || isSubmitting}
           >
             <option value="">Sem categoria</option>
 
@@ -127,7 +133,11 @@ export function ContactForm({ buttonLabel, onSubmit }) {
         </FormGroup>
 
         <ButtonContainer>
-          <Button type="submit" disabled={!isFormValid}>
+          <Button
+            type="submit"
+            disabled={!isFormValid}
+            isLoading={isSubmitting}
+          >
             {buttonLabel}
           </Button>
         </ButtonContainer>

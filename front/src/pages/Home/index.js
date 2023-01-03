@@ -24,7 +24,7 @@ import emptyBox from '../../assets/images/empty-box.svg';
 import magnifierQuestiom from '../../assets/images/magnifier-question.svg';
 
 import { Loader } from '../../components/Loader';
-import Button from '../../components/Button';
+import { Button } from '../../components/Button';
 import ContactsService from '../../service/ContactsService';
 
 export function Home() {
