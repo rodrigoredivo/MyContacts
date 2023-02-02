@@ -1,12 +1,10 @@
-import { useHistory, useParams } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import ContactsService from '../../service/ContactsService';
-
+import { useHistory, useParams } from 'react-router-dom';
 import toast from '../../utils/toast';
+import ContactsService from '../../service/ContactsService';
 import { useSafeAsyncAction } from '../../hooks/useSafeAsyncAction';
-import Presentation from './Presentation';
 
-export default function Container() {
+export default function useEditContact() {
   const [isLoading, setIsLoading] = useState(true);
   const [contactName, setContactName] = useState('');
   const contactFormRef = useRef(null);
@@ -18,9 +16,7 @@ export default function Container() {
   useEffect(() => {
     const loadContact = async () => {
       try {
-        const contact = await ContactsService.getContactById(
-          id,
-        );
+        const contact = await ContactsService.getContactById(id);
 
         safeAsyncAction(() => {
           contactFormRef.current.setFieldsValues(contact);
@@ -43,10 +39,7 @@ export default function Container() {
 
   const handleSubmit = async (contact) => {
     try {
-      const contactData = await ContactsService.updateContact(
-        id,
-        contact,
-      );
+      const contactData = await ContactsService.updateContact(id, contact);
 
       setContactName(contactData.name);
       toast({
@@ -62,12 +55,10 @@ export default function Container() {
     }
   };
 
-  return (
-    <Presentation
-      isLoading={isLoading}
-      contactName={contactName}
-      contactFormRef={contactFormRef}
-      onSubmit={handleSubmit}
-    />
-  );
+  return {
+    isLoading,
+    contactName,
+    contactFormRef,
+    handleSubmit,
+  };
 }

@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable no-useless-return */
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 export default function useErrors() {
   const [errors, setErrors] = useState([]);
 
-  const setError = ({ field, message }) => {
+  const setError = useCallback(({ field, message }) => {
     const errorAlreadyExists = errors.find((error) => error.field === 'email');
 
     if (errorAlreadyExists) {
@@ -16,15 +16,17 @@ export default function useErrors() {
       ...prevState,
       { field, message },
     ]);
-  };
+  }, [errors]);
 
-  const removeError = (fieldName) => {
+  const removeError = useCallback((fieldName) => {
     setErrors((prevState) => prevState.filter(
       (error) => error.field !== fieldName,
     ));
-  };
+  }, []);
 
-  const getErrorMessageByFieldName = (fieldName) => errors.find((error) => error.field === fieldName)?.message;
+  const getErrorMessageByFieldName = useCallback((fieldName) => (
+    errors.find((error) => error.field === fieldName)?.message
+  ), [errors]);
 
   return {
     errors,
