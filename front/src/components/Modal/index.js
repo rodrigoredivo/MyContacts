@@ -31,7 +31,7 @@ export function Modal({
 
     const overlayRefElement = overlayRef.current;
     if (!visible && overlayRef.current) {
-      overlayRefElement.current.addEventListener('animationend', handleAnimationEnd);
+      overlayRefElement.addEventListener('animationend', handleAnimationEnd);
     }
 
     return () => {
